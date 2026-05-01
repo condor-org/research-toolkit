@@ -51,10 +51,27 @@ research/
 El agente debe:
 1. Leer `<carpeta>/README.md` para entender qué se pide.
 2. Leer `<carpeta>/context/` si tiene archivos.
-3. Investigar (empírico o conceptual según el README).
-4. Escribir en `<carpeta>/findings/`.
-5. Updatear `<carpeta>/README.md` con hallazgos + recomendación + bibliografía.
-6. Abrir PR con todo.
+3. Crear branch nuevo: `research/<slug>` (recomendado) o `claude/<slug>` (acepta cualquiera).
+4. Investigar (empírico o conceptual según el README).
+5. Escribir en `<carpeta>/findings/`, **commiteando incrementalmente** (ver siguiente sección).
+6. Updatear `<carpeta>/README.md` con hallazgos + recomendación + bibliografía.
+7. Abrir PR contra `main` con todo.
+
+## Persistencia: commit incremental OBLIGATORIO
+
+**Las sesiones cloud pueden timeoutear sin aviso** (rate limits de la API, errores transient, cap de tiempo). Si el agente acumula trabajo en memoria y commitea todo al final, un timeout justo antes del commit destruye toda la investigación.
+
+**Regla**: cada vez que el agente escribe un archivo en `findings/` o updatea `README.md`, debe commitear y pushear inmediatamente.
+
+```bash
+git add <archivo-recién-escrito>
+git commit -m "WIP: <descripción corta>"
+git push origin <branch>
+```
+
+**No acumules cambios.** Si vas a escribir 5 archivos de findings, son 5 commits + 5 pushes (uno por archivo). Si la API timeoutea en el archivo 3, el branch queda con los 2 anteriores y la próxima vez el agente puede continuar desde ahí.
+
+Cuando todo esté escrito, abrí el PR con un mensaje final del estilo "Research complete: <slug>".
 
 ## Calidad de fuentes (research conceptual)
 
